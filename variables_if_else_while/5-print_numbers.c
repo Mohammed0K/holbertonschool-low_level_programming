@@ -2,16 +2,17 @@
 
 /**
  * main - Prints all single-digit numbers of base 10 starting from 0.
- * Return: Return 0 when done.
+ *
+ * Return: Always 0 (Success)
  */
 int main(void)
 {
-    int rawr;
+	int digit;
 
-    for (rawr = 0; rawr <= 9; rawr++)
-    {
-        printf("%d", rawr);
-    }
-    putchar('\n');
-    return (0);
+	for (digit = 0; digit <= 9; digit++)
+	{
+		printf("%d", digit);
+	}
+	putchar('\n');
+	return (0);
 }

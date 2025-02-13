@@ -2,16 +2,17 @@
 
 /**
  * main - Prints all single-digit numbers of base 10 starting from 0.
- * Return: Return 0 when done.
+ *
+ * Return: Always 0 (Success)
  */
 int main(void)
 {
-    int war;
+	int digit;
 
-    for (war = '0'; war <= '9'; war++)
-    {
-        putchar(war);
-    }
-    putchar('\n');
-    return (0);
+	for (digit = '0'; digit <= '9'; digit++)
+	{
+		putchar(digit);
+	}
+	putchar('\n');
+	return (0);
 }
