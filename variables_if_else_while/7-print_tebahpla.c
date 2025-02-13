@@ -1,16 +1,17 @@
 #include <stdio.h>
+
 /**
- * main - Prints all signle digit numbers of base 10 starting from 0, followed by a new line.
+ * main - Prints the lowercase alphabet in reverse.
  * Return: Return 0 when done.
  */
 int main(void)
 {
-	int war;
+    char ch;
 
-	for (war = '0'; war <= '9'; war++)
-	{
-		putchar(war);
-	}
-	putchar('\n');
-	return (0);
+    for (ch = 'z'; ch >= 'a'; ch--)
+    {
+        putchar(ch);
+    }
+    putchar('\n');
+    return (0);
 }
