@@ -5,7 +5,8 @@
  * Return: Return 0 when done.
  */
 
-int main (void) {
+int main(void)
+{
 	int i;
 	char str[] = "_putchar";
 
@@ -14,5 +15,5 @@ int main (void) {
 		_putchar(str[i]);
 	}
 	_putchar('\n');
-	return 0;
+	return (0);
 }
