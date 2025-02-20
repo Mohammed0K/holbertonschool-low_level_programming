@@ -10,3 +10,4 @@ void times_table(void);
 void print_to_98(int n);
 void print_times_table(int n);
 int _isalpha(int c);
+int add(int, int);
