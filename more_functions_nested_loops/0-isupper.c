@@ -1,6 +1,4 @@
 #include "main.h"
-#include <stdio.h>
-#include <ctype.h>
 
 /*
  * _isupper  - return if C upper
