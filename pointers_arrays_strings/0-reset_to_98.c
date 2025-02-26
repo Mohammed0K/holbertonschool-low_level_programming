@@ -1,10 +1,11 @@
 #include "main.h"
-/*
- * int rest to number to 98
- * @n the value to rest the number
+
+/**
+ * reset_to_98 - change the value of *n to 98
+ * @n: data from user
  */
 
-void rest_to_number_98(int *c)
+void reset_to_98(int *n)
 {
 	*n = 98;
 }
