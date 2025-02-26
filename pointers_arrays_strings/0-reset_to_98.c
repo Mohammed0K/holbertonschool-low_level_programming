@@ -4,7 +4,7 @@
  * @n the value to rest the number
  */
 
-int rest_to_number_98(int *c)
+void rest_to_number_98(int *c)
 {
 	*n = 98;
 }
