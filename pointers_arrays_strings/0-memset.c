@@ -1,21 +1,18 @@
-nclude "main.h"
+#include "main.h"
 /*
  * int main print array to see the result
  * @i for print
- *
- * /
+ * return s
+ */
 
 
-int main(void)
+char *_memset(char *s, char b, unsigned int n)
 {
-	char arr[10] = [0];
+	unsigned int i;
 
-	_memset(arr, 'X', 5);
-
-	for (int i= 1; i < 10; i++)
+	for (i = 0; i < n; i++)
 	{
-	printf("%c ", arr[i] ? arr[i] : '.');
+		s[i] = b;
 	}
-	printf("\n");
-	return 0;
+	return (s);
 }
