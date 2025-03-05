@@ -1,8 +1,12 @@
 #include "main.h"
-/*
- * int main print array to see the result
- * @i for print
- * return s
+
+/**
+ * _memset - print array to see the result
+ * @s: Pointer to the memory area
+ * @b: The constant byte to fil
+ * @n: Number of bytes to fill
+ *
+ * Return: Pointer to the memorty area s
  */
 
 
