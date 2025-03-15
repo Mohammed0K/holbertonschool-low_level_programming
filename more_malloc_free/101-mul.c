@@ -5,6 +5,7 @@
 int _digit(char *str);
 int _strlen(char *str);
 void _errors(void);
+int _putchar(char c);
 
 int *g_result = NULL; /* Global pointer for allocated memory */
 
@@ -12,12 +13,6 @@ int *g_result = NULL; /* Global pointer for allocated memory */
  * main - Multiplies two positive numbers.
  * @argc: The number of command-line arguments.
  * @argv: An array of command-line argument strings.
- *
- * Description: If the number of arguments is not 3 or if any argument
- *              contains a non-digit, the program prints "Error" followed
- *              by a new line and exits with status 98. Otherwise, it
- *              multiplies the two numbers (base 10) and prints the result,
- *              followed by a new line.
  *
  * Return: 0 on success.
  */
@@ -95,16 +90,23 @@ int _digit(char *str)
 }
 
 /**
- * _errors - Writes "Error" and exits the program with status 98.
+ * _errors - Prints "Error" to stdout and exits with status 98.
  */
 void _errors(void)
 {
+	char *err = "Error\n";
+	int i = 0;
+
+	while (err[i])
+	{
+		_putchar(err[i]);
+		i++;
+	}
 	if (g_result)
 	{
 		free(g_result);
 		g_result = NULL;
 	}
-	write(2, "Error\n", 6);
 	exit(98);
 }
 
