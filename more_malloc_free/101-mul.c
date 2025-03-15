@@ -1,8 +1,5 @@
 #include <unistd.h>
 #include <stdlib.h>
-#ifdef __GLIBC__
-#include <malloc.h>
-#endif
 
 /**
  * _digit - Checks if a string contains only digits.
@@ -96,7 +93,7 @@ int main(int argc, char *argv[])
 	len2 = _strlen(s2);
 	len = len1 + len2 + 1;
 	result = malloc(sizeof(int) * len);
-	if (result == NULL)
+	if (!result)
 		_errors();
 	for (i = 0; i < len; i++)
 		result[i] = 0;
@@ -127,8 +124,6 @@ int main(int argc, char *argv[])
 		_putchar('0');
 	_putchar('\n');
 	free(result);
-#ifdef __GLIBC__
-	malloc_trim(0);
-#endif
 	return (0);
 }
+
