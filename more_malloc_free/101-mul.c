@@ -27,12 +27,9 @@ int main(int argc, char *argv[])
 	len1 = _strlen(s1);
 	len2 = _strlen(s2);
 	len = len1 + len2 + 1;
-	result = malloc(sizeof(int) * len);
+	result = calloc(len, sizeof(int));
 	if (!result)
 		_errors();
-	/* Initialize the result array to 0 */
-	for (i = 0; i < len; i++)
-		result[i] = 0;
 	/* Multiply each digit from s1 and s2 and add the results to result array */
 	for (i = len1 - 1; i >= 0; i--)
 	{
