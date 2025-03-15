@@ -1,7 +1,6 @@
-#include <stddef.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include <unistd.h>
+#include <stdlib.h>
+#include <stddef.h>
 
 int _digit(char *str);
 int _strlen(char *str);
@@ -19,6 +18,7 @@ int main(int argc, char *argv[])
 	char *s1, *s2;
 	int len1, len2, len, *result;
 	int i, j, digit1, digit2, carry, printed = 0;
+	char c;
 
 	if (argc != 3 || !_digit(argv[1]) || !_digit(argv[2]))
 		_errors();
@@ -54,11 +54,14 @@ int main(int argc, char *argv[])
 		if (result[i])
 			printed = 1;
 		if (printed)
-			printf("%d", result[i]);
+		{
+			c = result[i] + '0';
+			write(1, &c, 1);
+		}
 	}
 	if (!printed)
-		printf("0");
-	printf("\n");
+		write(1, "0", 1);
+	write(1, "\n", 1);
 	free(result);
 	return (0);
 }
@@ -83,11 +86,11 @@ int _digit(char *str)
 }
 
 /**
- * _errors - Prints an error message and exits the program.
+ * _errors - Writes an error message and exits the program.
  */
 void _errors(void)
 {
-	printf("Error\n");
+	write(1, "Error\n", 6);
 	exit(98);
 }
 
