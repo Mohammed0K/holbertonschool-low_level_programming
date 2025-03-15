@@ -1,6 +1,9 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <stddef.h>
+#ifdef __GLIBC__
+#include <malloc.h>
+#endif
 
 int _digit(char *str);
 int _strlen(char *str);
@@ -67,6 +70,9 @@ int main(int argc, char *argv[])
 	write(1, "\n", 1);
 	free(result);
 	g_result = NULL;
+#ifdef __GLIBC__
+	malloc_trim(0);
+#endif
 	return (0);
 }
 
@@ -90,7 +96,8 @@ int _digit(char *str)
 }
 
 /**
- * _errors - Prints "Error" to stdout and exits with status 98.
+ * _errors - Prints "Error" to stdout, frees allocated memory,
+ *           trims malloc internal buffers, and exits with status 98.
  */
 void _errors(void)
 {
@@ -107,6 +114,9 @@ void _errors(void)
 		free(g_result);
 		g_result = NULL;
 	}
+#ifdef __GLIBC__
+	malloc_trim(0);
+#endif
 	exit(98);
 }
 
