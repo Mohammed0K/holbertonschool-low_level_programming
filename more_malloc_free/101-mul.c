@@ -1,5 +1,8 @@
 #include <unistd.h>
 #include <stdlib.h>
+#ifdef __GLIBC__
+#include <malloc.h>
+#endif
 
 /**
  * _digit - Checks if a string contains only digits.
@@ -38,11 +41,30 @@ int _strlen(char *str)
 }
 
 /**
+ * _putchar - Writes the character c to stdout.
+ * @c: The character to print.
+ *
+ * Return: On success 1.
+ */
+int _putchar(char c)
+{
+	return (write(1, &c, 1));
+}
+
+/**
  * _errors - Prints "Error" to stdout and exits with status 98.
  */
 void _errors(void)
 {
-	write(1, "Error\n", 6);
+	char *err = "Error\n";
+	int i;
+
+	i = 0;
+	while (err[i])
+	{
+		_putchar(err[i]);
+		i++;
+	}
 	exit(98);
 }
 
@@ -51,11 +73,10 @@ void _errors(void)
  * @argc: The number of command-line arguments.
  * @argv: An array of command-line argument strings.
  *
- * Description: If the number of arguments is not 3 or any argument
- *              contains a non-digit, the program prints "Error"
- *              followed by a new line and exits with status 98.
- *              Otherwise, it multiplies the two numbers (base 10) and
- *              prints the result followed by a new line.
+ * Description: If the number of arguments is not 3 or any argument contains
+ *              a non-digit, the program prints "Error" followed by a new line
+ *              and exits with status 98. Otherwise, it multiplies the two
+ *              numbers (base 10) and prints the result followed by a new line.
  *
  * Return: 0 on success.
  */
@@ -75,7 +96,7 @@ int main(int argc, char *argv[])
 	len2 = _strlen(s2);
 	len = len1 + len2 + 1;
 	result = malloc(sizeof(int) * len);
-	if (!result)
+	if (result == NULL)
 		_errors();
 	for (i = 0; i < len; i++)
 		result[i] = 0;
@@ -99,13 +120,15 @@ int main(int argc, char *argv[])
 		if (printed)
 		{
 			c = result[i] + '0';
-			write(1, &c, 1);
+			_putchar(c);
 		}
 	}
 	if (!printed)
-		write(1, "0", 1);
-	write(1, "\n", 1);
+		_putchar('0');
+	_putchar('\n');
 	free(result);
+#ifdef __GLIBC__
+	malloc_trim(0);
+#endif
 	return (0);
 }
-
