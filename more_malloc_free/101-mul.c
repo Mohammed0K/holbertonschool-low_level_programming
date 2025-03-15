@@ -1,35 +1,35 @@
-#include "main.h"
+#include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
-
-unsigned int *g_prod_digits = NULL;
+#include <ctype.h>
 
 /**
- * initDigitArray - Allocates and initializes an array of digits.
- * @size: Array size.
+ * initDigitArray - Allocates and initializes an array of unsigned integers.
+ * @size: The size of the array to be allocated.
  *
- * Return: Pointer to the initialized array, or NULL on failure.
+ * Return: Pointer to the allocated array, or NULL if memory allocation fails.
  */
 unsigned int *initDigitArray(size_t size)
 {
-	unsigned int *arr;
-	size_t i;
+	unsigned int *arr = malloc(sizeof(unsigned int) * size);
 
-	arr = malloc(sizeof(unsigned int) * size);
 	if (arr == NULL)
 		return (NULL);
-	for (i = 0; i < size; i++)
+
+	for (size_t i = 0; i < size; i++)
 		arr[i] = 0;
+
 	return (arr);
 }
 
 /**
- * stringIntMultiply - Multiplies two positive number strings.
- * @prod_digits: Array to store the digits of the product.
- * @n1_digits: String containing the multiplicand digits.
- * @n2_digits: String containing the multiplier digits.
- * @n1_len: Number of digits in the multiplicand.
- * @n2_len: Number of digits in the multiplier.
+ * stringIntMultiply - Multiplies two numbers represented as strings.
+ * @prod_digits: Array where the resulting digits will be stored.
+ * @n1_digits: First string representing the first number.
+ * @n2_digits: Second string representing the second number.
+ * @n1_len: Length of the first string.
+ * @n2_len: Length of the second string.
+ *
+ * Return: Nothing.
  */
 void stringIntMultiply(unsigned int *prod_digits, char *n1_digits,
 		       char *n2_digits, size_t n1_len, size_t n2_len)
@@ -37,8 +37,6 @@ void stringIntMultiply(unsigned int *prod_digits, char *n1_digits,
 	int i, j, sum;
 	unsigned char digit1, digit2;
 
-	if (prod_digits == NULL || n1_digits == NULL || n2_digits == NULL)
-		return;
 	for (i = n1_len - 1; i >= 0; i--)
 	{
 		sum = 0;
@@ -50,94 +48,81 @@ void stringIntMultiply(unsigned int *prod_digits, char *n1_digits,
 			prod_digits[i + j + 1] = sum % 10;
 			sum /= 10;
 		}
-		if (sum > 0)
-			prod_digits[i + j + 1] += sum;
+		prod_digits[i + j + 1] += sum;
 	}
 }
 
 /**
- * stringIsPosInt - Validates if a string represents a positive integer.
- * @s: The string to test.
+ * stringIsPosInt - Checks if a string represents a positive integer.
+ * @s: The string to check.
  *
- * Return: 1 if true, 0 if false.
+ * Return: 1 if the string represents a positive integer, 0 otherwise.
  */
 int stringIsPosInt(char *s)
 {
 	size_t i;
 
+	if (s == NULL || *s == '\0')
+		return (0);
 	for (i = 0; s[i]; i++)
 	{
-		if (s[i] < '0' || s[i] > '9')
+		if (!isdigit((unsigned char)s[i]))
 			return (0);
 	}
 	return (1);
 }
 
 /**
- * _putchar - Writes the character c to stdout.
- * @c: The character to print.
+ * error_exit - Prints an error message and exits the program.
+ * @status: Exit status code.
  *
- * Return: On success 1.
+ * Return: Nothing.
  */
-void _putchar(char c)
+void error_exit(int status)
 {
-	write(1, &c, 1);
-}
-
-/**
- * error - Prints "Error" to stdout, frees allocated memory, and exits.
- * @status: Error code to exit with.
- */
-void error(int status)
-{
-	_putchar('E');
-	_putchar('r');
-	_putchar('r');
-	_putchar('o');
-	_putchar('r');
-	_putchar('\n');
-	if (g_prod_digits != NULL)
-	{
-		free(g_prod_digits);
-		g_prod_digits = NULL;
-	}
+	printf("Error\n");
 	exit(status);
 }
 
 /**
- * main - Entry point.
+ * main - Entry point of the program that multiplies two positive numbers.
  * @argc: Number of command-line arguments.
- * @argv: Array of command-line argument strings.
+ * @argv: Array of strings representing the command-line arguments.
  *
- * Return: 0 on success, 98 on failure.
+ * Return: 0 on success, or exits with status 98 on error.
  */
 int main(int argc, char **argv)
 {
-	size_t i, av1_len, av2_len, prod_len;
-	unsigned int *prod_digits = NULL;
+	size_t av1_len, av2_len, prod_len, i;
+	unsigned int *prod_digits;
 
 	if (argc != 3 || !stringIsPosInt(argv[1]) || !stringIsPosInt(argv[2]))
-		error(98);
-	for (i = 0, av1_len = 0; argv[1][i]; i++)
-		av1_len++;
-	for (i = 0, av2_len = 0; argv[2][i]; i++)
-		av2_len++;
+		error_exit(98);
+
+	for (av1_len = 0; argv[1][av1_len]; av1_len++)
+		;
+	for (av2_len = 0; argv[2][av2_len]; av2_len++)
+		;
+
 	prod_len = av1_len + av2_len;
 	prod_digits = initDigitArray(prod_len);
 	if (prod_digits == NULL)
-		error(98);
-	g_prod_digits = prod_digits;
+		error_exit(98);
+
 	stringIntMultiply(prod_digits, argv[1], argv[2], av1_len, av2_len);
-	/* Omit leading zeroes */
+
 	for (i = 0; i < prod_len && prod_digits[i] == 0; i++)
 		;
+
 	if (i == prod_len)
-		_putchar('0');
-	for (; i < prod_len; i++)
-		_putchar(prod_digits[i] + '0');
-	_putchar('\n');
+		putchar('0');
+	else
+	{
+		for (; i < prod_len; i++)
+			putchar(prod_digits[i] + '0');
+	}
+
+	putchar('\n');
 	free(prod_digits);
-	g_prod_digits = NULL;
 	return (0);
 }
-
