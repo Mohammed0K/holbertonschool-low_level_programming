@@ -27,10 +27,13 @@ int main(int argc, char *argv[])
 	len1 = _strlen(s1);
 	len2 = _strlen(s2);
 	len = len1 + len2 + 1;
-	result = calloc(len, sizeof(int));
+	result = malloc(sizeof(int) * len);
 	if (!result)
 		_errors();
-	/* Multiply each digit from s1 and s2 and add the results to result array */
+	/* Initialize result array to 0 */
+	for (i = 0; i < len; i++)
+		result[i] = 0;
+	/* Multiply digits */
 	for (i = len1 - 1; i >= 0; i--)
 	{
 		digit1 = s1[i] - '0';
@@ -42,10 +45,10 @@ int main(int argc, char *argv[])
 			result[i + j + 1] = carry % 10;
 			carry /= 10;
 		}
-		/* j is -1 after the inner loop; add remaining carry to the next left cell */
+		/* j is -1 after the inner loop; add remaining carry */
 		result[i + j + 1] += carry;
 	}
-	/* Print the result skipping any leading zeros */
+	/* Print result skipping leading zeros */
 	for (i = 0; i < len - 1; i++)
 	{
 		if (result[i])
@@ -73,7 +76,7 @@ int _digit(char *str)
 {
 	int i = 0;
 
-	while (str[i] != '\0')
+	while (str[i])
 	{
 		if (str[i] < '0' || str[i] > '9')
 			return (0);
@@ -88,7 +91,7 @@ int _digit(char *str)
 void _errors(void)
 {
 	write(1, "Error\n", 6);
-	exit(98);
+	_exit(98);
 }
 
 /**
@@ -101,7 +104,7 @@ int _strlen(char *str)
 {
 	int i = 0;
 
-	while (str[i] != '\0')
+	while (str[i])
 		i++;
 	return (i);
 }
