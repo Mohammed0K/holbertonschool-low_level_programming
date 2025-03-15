@@ -6,6 +6,8 @@ int _digit(char *str);
 int _strlen(char *str);
 void _errors(void);
 
+int *g_result = NULL; /* Global pointer for allocated memory */
+
 /**
  * main - Multiplies two positive numbers.
  * @argc: The number of command-line arguments.
@@ -14,7 +16,7 @@ void _errors(void);
  * Description: If the number of arguments is not 3 or if any argument
  *              contains a non-digit, the program prints "Error" followed
  *              by a new line and exits with status 98. Otherwise, it
- *              multiplies the two numbers (base 10) and prints the result
+ *              multiplies the two numbers (base 10) and prints the result,
  *              followed by a new line.
  *
  * Return: 0 on success.
@@ -36,6 +38,7 @@ int main(int argc, char *argv[])
 	result = malloc(sizeof(int) * len);
 	if (!result)
 		_errors();
+	g_result = result;
 	/* Initialize result array to 0 */
 	for (i = 0; i < len; i++)
 		result[i] = 0;
@@ -51,7 +54,6 @@ int main(int argc, char *argv[])
 			result[i + j + 1] = carry % 10;
 			carry /= 10;
 		}
-		/* j becomes -1; add remaining carry */
 		result[i + j + 1] += carry;
 	}
 	/* Print the result, skipping any leading zeros */
@@ -69,6 +71,7 @@ int main(int argc, char *argv[])
 		write(1, "0", 1);
 	write(1, "\n", 1);
 	free(result);
+	g_result = NULL;
 	return (0);
 }
 
@@ -96,7 +99,12 @@ int _digit(char *str)
  */
 void _errors(void)
 {
-	write(1, "Error\n", 6);
+	if (g_result)
+	{
+		free(g_result);
+		g_result = NULL;
+	}
+	write(2, "Error\n", 6);
 	exit(98);
 }
 
