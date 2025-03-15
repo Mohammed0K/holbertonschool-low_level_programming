@@ -38,30 +38,11 @@ int _strlen(char *str)
 }
 
 /**
- * _putchar - Writes the character c to stdout.
- * @c: The character to print.
- *
- * Return: On success 1.
- */
-int _putchar(char c)
-{
-	return (write(1, &c, 1));
-}
-
-/**
  * _errors - Prints "Error" to stdout and exits with status 98.
  */
 void _errors(void)
 {
-	char *err = "Error\n";
-	int i;
-
-	i = 0;
-	while (err[i])
-	{
-		_putchar(err[i]);
-		i++;
-	}
+	write(1, "Error\n", 6);
 	exit(98);
 }
 
@@ -73,14 +54,15 @@ void _errors(void)
  * Description: If the number of arguments is not 3 or any argument
  *              contains a non-digit, the program prints "Error"
  *              followed by a new line and exits with status 98.
+ *              Otherwise, it multiplies the two numbers (base 10) and
+ *              prints the result followed by a new line.
  *
  * Return: 0 on success.
  */
 int main(int argc, char *argv[])
 {
-	int len1, len2, len;
+	int len1, len2, len, i, j, digit1, digit2, carry, printed;
 	int *result;
-	int i, j, digit1, digit2, carry, printed;
 	char c;
 	char *s1, *s2;
 
@@ -112,17 +94,17 @@ int main(int argc, char *argv[])
 	}
 	for (i = 0; i < len - 1; i++)
 	{
-		if (result[i])
+		if (result[i] != 0)
 			printed = 1;
 		if (printed)
 		{
 			c = result[i] + '0';
-			_putchar(c);
+			write(1, &c, 1);
 		}
 	}
 	if (!printed)
-		_putchar('0');
-	_putchar('\n');
+		write(1, "0", 1);
+	write(1, "\n", 1);
 	free(result);
 	return (0);
 }
