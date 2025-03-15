@@ -11,6 +11,7 @@ void _errors(void);
  * main - Entry point for multiplying two positive numbers provided as strings.
  * @argc: Number of command-line arguments.
  * @argv: Array of command-line argument strings.
+ *
  * Return: 0 on success.
  */
 int main(int argc, char *argv[])
@@ -26,10 +27,12 @@ int main(int argc, char *argv[])
 	len1 = _strlen(s1);
 	len2 = _strlen(s2);
 	len = len1 + len2 + 1;
-	/* Use calloc to allocate and initialize the array to 0 */
-	result = calloc(len, sizeof(int));
+	result = malloc(sizeof(int) * len);
 	if (!result)
-		return (1);
+		_errors();
+	/* Initialize the result array to 0 */
+	for (i = 0; i < len; i++)
+		result[i] = 0;
 	/* Multiply each digit from s1 and s2 and add the results to result array */
 	for (i = len1 - 1; i >= 0; i--)
 	{
@@ -63,6 +66,7 @@ int main(int argc, char *argv[])
 /**
  * _digit - Checks if a string contains only digits.
  * @str: The string to check.
+ *
  * Return: 1 if the string contains only digits, 0 otherwise.
  */
 int _digit(char *str)
@@ -90,6 +94,7 @@ void _errors(void)
 /**
  * _strlen - Calculates the length of a string.
  * @str: The string.
+ *
  * Return: The length of the string.
  */
 int _strlen(char *str)
