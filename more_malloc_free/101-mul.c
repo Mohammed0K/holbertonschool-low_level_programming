@@ -1,126 +1,82 @@
+#include <stdio.h>
 #include <stdlib.h>
-#include "main.h"
+#include <ctype.h>
 
 /**
- * initDigitArray - initializes array with zeros
- * @size: size of array
- * Return: pointer or NULL
+ * error - prints Error and exits with code 98
  */
-unsigned int *initDigitArray(size_t size)
+void error(void)
 {
-	unsigned int *arr = malloc(sizeof(unsigned int) * size);
-	size_t i;
-
-	if (!arr)
-		return (NULL);
-
-	for (i = 0; i < size; i++)
-		arr[i] = 0;
-
-	return (arr);
+	printf("Error\n");
+	exit(98);
 }
 
 /**
- * stringIsPosInt - checks if string is positive integer
- * @s: input string
- * Return: 1 if true, 0 otherwise
+ * is_digit - checks if the string is only digits
+ * @str: input string
+ * Return: 1 true, 0 false
  */
-int stringIsPosInt(char *s)
+int is_digit(char *str)
 {
-	size_t i;
+	int i = 0;
 
-	if (!s || !*s)
+	if (!str || !*str)
 		return (0);
-	for (i = 0; s[i]; i++)
-	{
-		if (s[i] < '0' || s[i] > '9')
+	for (i = 0; str[i]; i++)
+		if (!isdigit(str[i]))
 			return (0);
-	}
 	return (1);
 }
 
 /**
- * error_exit - prints error and exits with status
- * @status: exit status
- */
-void error_exit(int status)
-{
-	char *err = "Error\n";
-	int i = 0;
-
-	while (err[i])
-		_putchar(err[i++]);
-	exit(status);
-}
-
-/**
- * stringIntMultiply - multiplies two strings representing integers
- * @prod_digits: result array
- * @n1_digits: first number
- * @n2_digits: second number
- * @n1_len: first length
- * @n2_len: second length
- */
-void stringIntMultiply(unsigned int *prod_digits, char *n1_digits,
-					   char *n2_digits, size_t n1_len, size_t n2_len)
-{
-	int i, j, sum, digit1, digit2;
-
-	for (i = n1_len - 1; i >= 0; i--)
-	{
-		sum = 0;
-		digit1 = n1_digits[i] - '0';
-
-		for (j = n2_len - 1; j >= 0; j--)
-		{
-			digit2 = n2_digits[j] - '0';
-			sum += prod_digits[i + j + 1] + digit1 * digit2;
-			prod_digits[i + j + 1] = sum % 10;
-			sum /= 10;
-		}
-
-		prod_digits[i + j + 1] += sum;
-	}
-}
-
-/**
- * main - entry point
+ * main - multiplies two numbers
  * @argc: argument count
- * @argv: arguments vector
- * Return: 0 success or 98 error
+ * @argv: argument vector
+ * Return: Always 0 (Success), 98 (Error)
  */
-int main(int argc, char **argv)
+int main(int argc, char *argv[])
 {
-	size_t i, av1_len, av2_len, prod_len;
-	unsigned int *prod_digits;
+	int len1, len2, i, j, carry, n1, n2, *result;
 
-	if (argc != 3 || !stringIsPosInt(argv[1]) || !stringIsPosInt(argv[2]))
-		error_exit(98);
+	if (argc != 3 || !is_digit(argv[1]) || !is_digit(argv[2]))
+		error();
 
-	for (av1_len = 0; argv[1][av1_len]; av1_len++)
+	for (len1 = 0; argv[1][len1]; len1++)
 		;
-	for (av2_len = 0; argv[2][av2_len]; av2_len++)
-		;
-
-	prod_len = av1_len + av2_len;
-	prod_digits = initDigitArray(prod_len);
-	if (!prod_digits)
-		error_exit(98);
-
-	stringIntMultiply(prod_digits, argv[1], argv[2], av1_len, av2_len);
-
-	for (i = 0; i < prod_len && prod_digits[i] == 0; i++)
+	for (len2 = 0; argv[2][len2]; len2++)
 		;
 
-	if (i == prod_len)
-		_putchar('0');
+	result = calloc(len1 + len2, sizeof(int));
+	if (result == NULL)
+		error();
+
+	for (i = len1 - 1; i >= 0; i--)
+	{
+		n1 = argv[1][i] - '0';
+		carry = 0;
+		for (j = len2 - 1; j >= 0; j--)
+		{
+			n2 = argv[2][j] - '0';
+			carry += result[i + j + 1] + n1 * n2;
+			result[i + j + 1] = carry % 10;
+			carry /= 10;
+		}
+		result[i + j + 1] += carry;
+	}
+
+	i = 0;
+	while (i < (len1 + len2) && result[i] == 0)
+		i++;
+
+	if (i == len1 + len2)
+		putchar('0');
 	else
-		for (; i < prod_len; i++)
-			_putchar(prod_digits[i] + '0');
+		for (; i < (len1 + len2); i++)
+			putchar(result[i] + '0');
 
-	_putchar('\n');
+	putchar('\n');
+	free(result);
 
-	free(prod_digits);
 	return (0);
 }
 
