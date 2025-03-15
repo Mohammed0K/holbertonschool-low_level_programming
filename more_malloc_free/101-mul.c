@@ -1,22 +1,79 @@
-#include "main.h"
-#include <stdlib.h>
+#include <stddef.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
 
-#define ERR_MSG "Error"
+int _digit(char *str);
+int _strlen(char *str);
+void _errors(void);
 
 /**
- * is_digit - checks if a string contains a non-digit char
- * @s: string to be evaluated
- *
- * Return: 0 if a non-digit is found, 1 otherwise
+ * main - Entry point for multiplying two positive numbers provided as strings.
+ * @argc: Number of command-line arguments.
+ * @argv: Array of command-line argument strings.
+ * Return: 0 on success.
  */
-int is_digit(char *s)
+int main(int argc, char *argv[])
+{
+	char *s1, *s2;
+	int len1, len2, len, *result;
+	int i, j, digit1, digit2, carry, printed = 0;
+
+	if (argc != 3 || !_digit(argv[1]) || !_digit(argv[2]))
+		_errors();
+	s1 = argv[1];
+	s2 = argv[2];
+	len1 = _strlen(s1);
+	len2 = _strlen(s2);
+	len = len1 + len2 + 1;
+	result = malloc(sizeof(int) * len);
+	if (!result)
+		return (1);
+	/* Initialize the result array to 0 */
+	for (i = 0; i < len; i++)
+		result[i] = 0;
+	/* Multiply each digit from s1 and s2 and add the results to result array */
+	for (i = len1 - 1; i >= 0; i--)
+	{
+		digit1 = s1[i] - '0';
+		carry = 0;
+		for (j = len2 - 1; j >= 0; j--)
+		{
+			digit2 = s2[j] - '0';
+			carry += result[i + j + 1] + (digit1 * digit2);
+			result[i + j + 1] = carry % 10;
+			carry /= 10;
+		}
+		/* j is -1 after the inner loop; add remaining carry to the next left cell */
+		result[i + j + 1] += carry;
+	}
+	/* Print the result skipping any leading zeros */
+	for (i = 0; i < len - 1; i++)
+	{
+		if (result[i])
+			printed = 1;
+		if (printed)
+			printf("%d", result[i]);
+	}
+	if (!printed)
+		printf("0");
+	printf("\n");
+	free(result);
+	return (0);
+}
+
+/**
+ * _digit - Checks if a string contains only digits.
+ * @str: The string to check.
+ * Return: 1 if the string contains only digits, 0 otherwise.
+ */
+int _digit(char *str)
 {
 	int i = 0;
 
-	while (s[i])
+	while (str[i] != '\0')
 	{
-		if (s[i] < '0' || s[i] > '9')
+		if (str[i] < '0' || str[i] > '9')
 			return (0);
 		i++;
 	}
@@ -24,78 +81,25 @@ int is_digit(char *s)
 }
 
 /**
- * _strlen - returns the length of a string
- * @s: string to evaluate
- *
- * Return: the length of the string
+ * _errors - Prints an error message and exits the program.
  */
-int _strlen(char *s)
-{
-	int i = 0;
-
-	while (s[i] != '\0')
-	{
-		i++;
-	}
-	return (i);
-}
-
-/**
- * errors - handles errors for main
- */
-void errors(void)
+void _errors(void)
 {
 	printf("Error\n");
 	exit(98);
 }
 
 /**
- * main - multiplies two positive numbers
- * @argc: number of arguments
- * @argv: array of arguments
- *
- * Return: always 0 (Success)
+ * _strlen - Calculates the length of a string.
+ * @str: The string.
+ * Return: The length of the string.
  */
-int main(int argc, char *argv[])
+int _strlen(char *str)
 {
-	char *s1, *s2;
-	int len1, len2, len, i, carry, digit1, digit2, *result, a = 0;
+	int i = 0;
 
-	s1 = argv[1], s2 = argv[2];
-	if (argc != 3 || !is_digit(s1) || !is_digit(s2))
-		errors();
-	len1 = _strlen(s1);
-	len2 = _strlen(s2);
-	len = len1 + len2 + 1;
-	result = malloc(sizeof(int) * len);
-	if (!result)
-		return (1);
-	for (i = 0; i <= len1 + len2; i++)
-		result[i] = 0;
-	for (len1 = len1 - 1; len1 >= 0; len1--)
-	{
-		digit1 = s1[len1] - '0';
-		carry = 0;
-		for (len2 = _strlen(s2) - 1; len2 >= 0; len2--)
-		{
-			digit2 = s2[len2] - '0';
-			carry += result[len1 + len2 + 1] + (digit1 * digit2);
-			result[len1 + len2 + 1] = carry % 10;
-			carry /= 10;
-		}
-		if (carry > 0)
-			result[len1 + len2 + 1] += carry;
-	}
-	for (i = 0; i < len - 1; i++)
-	{
-		if (result[i])
-			a = 1;
-		if (a)
-			_putchar(result[i] + '0');
-	}
-	if (!a)
-		_putchar('0');
-	_putchar('\n');
-	free(result);
-	return (0);
+	while (str[i] != '\0')
+		i++;
+	return (i);
 }
+
