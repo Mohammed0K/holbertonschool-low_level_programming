@@ -1,115 +1,77 @@
-#include "holberton.h"
-#include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+#include "main.h"
 
 /**
- * _isdigit - checks if character is digit
- * @c: the character to check
+ * count_word - helper function to count the number of words in a string
+ * @s: string to evaluate
  *
- * Return: 1 if digit, 0 otherwise
+ * Return: number of words
  */
-int _isdigit(int c)
+int count_word(char *s)
 {
-	return (c >= '0' && c <= '9');
-}
+	int flag, c, w;
 
-/**
- * _strlen - returns the length of a string
- * @s: the string whose length to check
- *
- * Return: integer length of string
- */
-int _strlen(char *s)
-{
-	int i = 0;
+	flag = 0;
+	w = 0;
 
-	while (*s++)
-		i++;
-	return (i);
-}
-
-/**
- * big_multiply - multiply two big number strings
- * @s1: the first big number string
- * @s2: the second big number string
- *
- * Return: the product big number string
- */
-char *big_multiply(char *s1, char *s2)
-{
-	char *r;
-	int l1, l2, a, b, c, x;
-
-	l1 = _strlen(s1);
-	l2 = _strlen(s2);
-	r = malloc(a = x = l1 + l2);
-	if (!r)
-		printf("Error\n"), exit(98);
-	while (a--)
-		r[a] = 0;
-
-	for (l1--; l1 >= 0; l1--)
+	for (c = 0; s[c] != '\0'; c++)
 	{
-		if (!_isdigit(s1[l1]))
+		if (s[c] == ' ')
+			flag = 0;
+		else if (flag == 0)
 		{
-			free(r);
-			printf("Error\n"), exit(98);
+			flag = 1;
+			w++;
 		}
-		a = s1[l1] - '0';
-		c = 0;
+	}
 
-		for (l2 = _strlen(s2) - 1; l2 >= 0; l2--)
+	return (w);
+}
+/**
+ * **strtow - splits a string into words
+ * @str: string to split
+ *
+ * Return: pointer to an array of strings (Success)
+ * or NULL (Error)
+ */
+char **strtow(char *str)
+{
+	char **matrix, *tmp;
+	int i, k = 0, len = 0, words, c = 0, start, end;
+
+	while (*(str + len))
+		len++;
+	words = count_word(str);
+	if (words == 0)
+		return (NULL);
+
+	matrix = (char **) malloc(sizeof(char *) * (words + 1));
+	if (matrix == NULL)
+		return (NULL);
+
+	for (i = 0; i <= len; i++)
+	{
+		if (str[i] == ' ' || str[i] == '\0')
 		{
-			if (!_isdigit(s2[l2]))
+			if (c)
 			{
-				free(r);
-				printf("Error\n"), exit(98);
+				end = i;
+				tmp = (char *) malloc(sizeof(char) * (c + 1));
+				if (tmp == NULL)
+					return (NULL);
+				while (start < end)
+					*tmp++ = str[start++];
+				*tmp = '\0';
+				matrix[k] = tmp - c;
+				k++;
+				c = 0;
 			}
-			b = s2[l2] - '0';
-
-			c += r[l1 + l2 + 1] + (a * b);
-			r[l1 + l2 + 1] = c % 10;
-
-			c /= 10;
 		}
-		if (c)
-			r[l1 + l2 + 1] += c;
+		else if (c++ == 0)
+			start = i;
 	}
-	return (r);
-}
 
+	matrix[k] = NULL;
 
-/**
- * main - multiply two big number strings
- * @argc: the number of arguments
- * @argv: the argument vector
- *
- * Return: Always 0 on success.
- */
-int main(int argc, char **argv)
-{
-	char *r;
-	int a, c, x;
-
-	if (argc != 3)
-		printf("Error\n"), exit(98);
-
-	x = _strlen(argv[1]) + _strlen(argv[2]);
-	r = big_multiply(argv[1], argv[2]);
-	c = 0;
-	a = 0;
-	while (c < x)
-	{
-		if (r[c])
-			a = 1;
-		if (a)
-			_putchar(r[c] + '0');
-		c++;
-	}
-	if (!a)
-		_putchar('0');
-	_putchar('\n');
-	free(r);
-	return (0);
+	return (matrix);
 }
