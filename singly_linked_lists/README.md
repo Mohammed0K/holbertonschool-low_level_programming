@@ -1,6 +1,6 @@
 # Singly Linked Lists Project
 
-##This project implements a set of functions to handle singly linked lists in C. It includes functions to:
+### This project implements a set of functions to handle singly linked lists in C. It includes functions to:
 
 - **Print the list** (`print_list`)
 - **Determine the length of the list** (`list_len`)
