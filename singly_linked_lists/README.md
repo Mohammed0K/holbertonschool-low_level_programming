@@ -13,7 +13,7 @@
 
 - **Compilation:** Code must be compiled on Ubuntu 20.04 LTS using `gcc` with the following options:
   
-`-Wall -Werror -Wextra -pedantic -std=gnu89`
+     `-Wall -Werror -Wextra -pedantic -std=gnu89`
 
 
 - **Betty Style:** All files must follow the Betty style guidelines (checked using `betty-style.pl` and `betty-doc.pl`).
