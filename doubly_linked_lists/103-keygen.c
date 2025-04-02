@@ -1,30 +1,51 @@
 #include "lists.h"
 
 /**
- * main - Generates a key for crackme5 based on the username
- * @argc: Number of arguments passed to the program
- * @argv: Array of argument strings
+ * main - Generates and prints passwords for the crackme5 executable.
+ * @argc: The number of arguments supplied to the program.
+ * @argv: An array of pointers to the arguments.
  *
- * Description: The key is computed by summing the ASCII values of the
- * characters in the username and multiplying the sum by the ASCII value
- * of the first character of the username.
- *
- * Return: 0 on success, 1 on failure
+ * Return: Always 0.
  */
-int main(int argc, char **argv)
+int main(int __attribute__((__unused__)) argc, char *argv[])
 {
-	unsigned int sum = 0;
-	unsigned int key;
-	int i;
+	char password[7], *codex;
+	int len = strlen(argv[1]), i, tmp;
 
-	if (argc != 2)
+	codex = "A-CHRDw87lNS0E9B2TibgpnMVys5XzvtOGJcYLU+4mjW6fxqZeF3Qa1rPhdKIouk";
+
+	tmp = (len ^ 59) & 63;
+	password[0] = codex[tmp];
+
+	tmp = 0;
+	for (i = 0; i < len; i++)
+		tmp += argv[1][i];
+	password[1] = codex[(tmp ^ 79) & 63];
+
+	tmp = 1;
+	for (i = 0; i < len; i++)
+		tmp *= argv[1][i];
+	password[2] = codex[(tmp ^ 85) & 63];
+
+	tmp = 0;
+	for (i = 0; i < len; i++)
 	{
-		printf("Usage: %s username\n", argv[0]);
-		return (1);
+		if (argv[1][i] > tmp)
+			tmp = argv[1][i];
 	}
-	for (i = 0; argv[1][i] != '\0'; i++)
-		sum += (unsigned int)argv[1][i];
-	key = sum * ((unsigned int)argv[1][0]);
-	printf("%u", key);
+	srand(tmp ^ 14);
+	password[3] = codex[rand() & 63];
+
+	tmp = 0;
+	for (i = 0; i < len; i++)
+		tmp += (argv[1][i] * argv[1][i]);
+	password[4] = codex[(tmp ^ 239) & 63];
+
+	for (i = 0; i < argv[1][0]; i++)
+		tmp = rand();
+	password[5] = codex[(tmp ^ 229) & 63];
+
+	password[6] = '\0';
+	printf("%s", password);
 	return (0);
 }
