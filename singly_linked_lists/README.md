@@ -12,7 +12,7 @@ This project implements a set of functions to handle singly linked lists in C. I
 ## Requirements
 
 - **Compilation:** Code must be compiled on Ubuntu 20.04 LTS using `gcc` with the following options:
--Wall -Werror -Wextra -pedantic -std=gnu89
+`-Wall -Werror -Wextra -pedantic -std=gnu89`
 
 - **Betty Style:** All files must follow the Betty style guidelines (checked using `betty-style.pl` and `betty-doc.pl`).
 - **Restrictions:** 
@@ -35,7 +35,7 @@ This project implements a set of functions to handle singly linked lists in C. I
 
 To compile the file for printing the list (using the provided `0-main.c` for testing), run:
 
-gcc -Wall -pedantic -Werror -Wextra -std=gnu89 0-main.c 0-print_list.c -o list_print
+`gcc -Wall -pedantic -Werror -Wextra -std=gnu89 0-main.c 0- print_list.c -o print_list`
 
 
 
