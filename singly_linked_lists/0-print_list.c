@@ -4,9 +4,9 @@
  * print_list - Prints all the elements of a list_t list.
  * @h: Pointer to the head of the list.
  *
- * Description: For each node in the list, the function prints the
- *              length of the string and the string itself. If the string
- *              is NULL, it prints [0] (nil).
+ * Description: This function iterates through the linked list and prints the
+ * length and the string stored in each node. If the string is NULL, it prints
+ * "[0] (nil)".
  *
  * Return: The number of nodes in the list.
  */
